@@ -10,8 +10,9 @@ Demonstrates how to use the stripe plugin.
     -  [Get your test Stripe API keys](https://stripe.com/docs/keys)
     - `cp lib/.env.dart lib/.env.dart` and set your Stripe publishable key.
     - `cp server/.env.example server/.env` and set the variable values in your newly created `.env` file.
+    - `cd server && npm install` install the npm dependencies.
 - Start the example
-    - Terminal 1: `cd server && yarn example start:server`
+    - Terminal 1: `cd server && npm run start:dev`
     - Terminal 2: `flutter run`
 
 ##### Additional steps for webhook forwarding
