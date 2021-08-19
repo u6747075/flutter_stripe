@@ -178,43 +178,35 @@ Stripe.instance.initPaymentSheet(
 );
 ```
 
-### 7. Optional - Enable Google Pay (Only Android)
 
-### Set up your integration
-To use Google Pay, first enable the Google Pay API by adding the following to the <application> tag of your AndroidManifest.xml:
 
-AndroidManifest.xml
+### 8. Optional - Enable Card Scanning (Only iOS)
 
-```xml
-<application>
-  ...
-  <meta-data
-    android:name="com.google.android.gms.wallet.api.enabled"
-    android:value="true" />
-</application>
-```
+To enable card scanning support, set the `NSCameraUsageDescription` **(Privacy - Camera Usage Description)** in the Info.plist of your application, and provide a reason for accessing the camera (e.g., “To scan cards”). Devices with iOS 13 or higher support card scanning.
 
-This guide assumes you’re using the latest version of the Stripe Android SDK.
+### 9. Optional - Customize the sheet 
 
-build.gradle
+All customization is configured through the SetupPaymentSheetParameters object.
 
-```
-dependencies {
-    implementation 'com.stripe:stripe-android:17.1.1'
-}
-```
-For more details, see Google Pay’s Set up Google Pay API for Android.
-
-### Add Google Pay
-To add Google Pay to your integration, set `googlePay: true` with your Google Pay environment (production or test) and the country code of your business.
+### Merchant display name
+You can specify a customer-facing business name that Stripe uses to display a “Pay (merchantDisplayName)” line item in the payment sheet. By default, this is your app’s name.
 
 ```dart
 Stripe.instance.initPaymentSheet(
   paymentSheetParameters: SetupPaymentSheetParameters(
     merchantDisplayName: 'Flutter Stripe Store Demo',
-    //...
-    testEnv: true,
-    merchantCountryCode: "US",
+  ),
+);
+```
+
+### UserInterfaceStyle (Only iOS)
+
+PaymentSheet automatically adapts to the user’s system-wide appearance settings (light and dark mode). If your app doesn’t support dark mode, you can force the style to always light or dark mode.
+
+```dart
+Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+     style: ThemeMode.dark,
   ),
 );
 ```
