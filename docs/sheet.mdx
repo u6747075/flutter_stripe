@@ -122,3 +122,38 @@ When the customer taps a **Checkout** button, call present to present the paymen
 
 
 Unless your business model requires immediate payment (e.g., an on-demand service), don’t assume you have received payment at this point. Instead, inform the customer that you confirmed their order and notify them by email when you fulfill their order in the next step.
+
+>> ADD MORE PAYMENT METHODS
+>> While cards finish payment by this point, other payment methods can take time to process before payment is complete. By not assuming you’ve received payment on the client, you can add additional payment methods in the future without updating your app.
+
+
+### 4.  Handle post-payment events
+
+Stripe sends a [`payment_intent.succeeded`](https://stripe.com/docs/api/events/types#event_types-payment_intent.succeeded) event when the payment completes. Use the Dashboard, a custom webhook, or a partner solution to receive these events and run actions, like sending an order confirmation email to your customer, logging the sale in a database, or starting a shipping workflow.
+
+Listen for these events rather than waiting on a callback from the client. On the client, the customer could close the browser window or quit the app before the callback executes. Setting up your integration to listen for asynchronous events also makes it easier to accept more payment methods in the future. Check out our [guide to payment methods](https://stripe.com/payments/payment-methods-guide) to see the differences between all supported payment methods.
+
+
+### 5. Test the integration
+
+Several test cards are available for you to use in test mode to make sure this integration is ready. Use them with any CVC, postal code, and future expiration date.
+
+NUMBER            DESCRIPTION
+4242424242424242	Succeeds and immediately processes the payment.
+4000002500003155	Requires authentication. Stripe will trigger a modal asking for the customer to authenticate.
+4000000000009995	Always fails with a decline code of insufficient_funds.
+
+For the full list of test cards see the guide on [testing](https://stripe.com/docs/testing).
+
+
+### 6. Optional - Enable Apple Pay (Only iOS)
+
+#### Register for an Apple Merchant ID
+Obtain an Apple Merchant ID by [registering for a new identifier](https://developer.apple.com/account/resources/identifiers/add/merchant) on the Apple Developer website.
+
+Fill out the form with a description and identifier. Your description is for your own records and you can modify it in the future. Stripe recommends using the name of your app as the identifier (e.g., `merchant.com.{{YOUR_APP_NAME}}`).
+
+#### Create a new Apple Pay certificate
+Create a certificate for your app to encrypt payment data.
+
+In the Dashboard’s [Apple Pay Settings](https://dashboard.stripe.com/settings/payments/apple_pay), click **Add new application** and follow the guide there.
