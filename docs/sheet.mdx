@@ -184,23 +184,8 @@ Stripe.instance.initPaymentSheet(
 To use Google Pay, first enable the Google Pay API by adding the following to the <application> tag of your AndroidManifest.xml:
 
 AndroidManifest.xml
-```xml
-<application>
-  ...
-  <meta-data
-    android:name="com.google.android.gms.wallet.api.enabled"
-    android:value="true" />
-</application>
-```
 
-This guide assumes you’re using the latest version of the Stripe Android SDK.
 
-build.gradle
-```
-dependencies {
-    implementation 'com.stripe:stripe-android:17.1.1'
-}
-```
 For more details, see Google Pay’s Set up Google Pay API for Android.
 
 ### Add Google Pay
