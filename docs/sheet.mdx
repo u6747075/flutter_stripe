@@ -178,7 +178,47 @@ Stripe.instance.initPaymentSheet(
 );
 ```
 
+### 7. Optional - Enable Google Pay (Only Android)
 
+### Set up your integration
+
+To use Google Pay, first enable the Google Pay API by adding the following to the `<application>` tag of your AndroidManifest.xml:
+
+AndroidManifest.xml
+
+```xml
+<application>
+  ...
+  <meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
+</application>
+```
+
+This guide assumes you’re using the latest version of the Stripe Android SDK.
+
+build.gradle
+
+```
+dependencies {
+    implementation 'com.stripe:stripe-android:17.1.1'
+}
+```
+For more details, see Google Pay’s Set up Google Pay API for Android.
+
+### Add Google Pay
+To add Google Pay to your integration, set `googlePay: true` with your Google Pay environment (production or test) and the country code of your business.
+
+```dart
+Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+    merchantDisplayName: 'Flutter Stripe Store Demo',
+    //...
+    testEnv: true,
+    merchantCountryCode: "US",
+  ),
+);
+```
 
 ### 8. Optional - Enable Card Scanning (Only iOS)
 
