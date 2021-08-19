@@ -70,3 +70,55 @@ For security reasons, your app can’t create these objects. Instead, add an end
 4. Returns the Payment Intent’s [client secret](https://stripe.com/docs/api/payment_intents/object#payment_intent_object-client_secret), the Ephemeral Key’s secret, and the Customer’s id to your app.
 
 Check examples implementations for your server [here](https://stripe.com/docs/payments/accept-a-payment?platform=ios#add-server-endpoint)
+
+### 3. Integrate the payment sheet [Client Side]
+
+Before displaying the payment sheet, your checkout page should:
+
+- Show the products being purchased and the total amount
+- Collect any required shipping information
+- Include a checkout button to present Stripe’s UI
+
+Next, integrate Stripe’s prebuilt payment UI into your app’s checkout.
+
+```dart
+Future<void> initPaymentSheet() async {
+    try {
+      // 1. create payment intent on the server
+      final data = await _createTestPaymentSheet();
+
+      // 2. initialize the payment sheet
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          merchantDisplayName: 'Flutter Stripe Store Demo',
+          paymentIntentClientSecret: data['paymentIntent'],
+          customerId: data['customer'],
+          customerEphemeralKeySecret: data['ephemeralKey'],
+        ),
+      );
+      setState(() {
+        _ready = true;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+      rethrow;
+    }
+}
+```
+
+When the customer taps a **Checkout** button, call present to present the payment sheet. After the customer completes the payment, the sheet is dismissed.
+
+
+```dart
+   await Stripe.instance.presentPaymentSheet(
+          parameters: PresentPaymentSheetParameters(
+        clientSecret: _paymentSheetData!['paymentIntent'],
+        confirmPayment: true,
+    ),
+  )
+```
+
+
+Unless your business model requires immediate payment (e.g., an on-demand service), don’t assume you have received payment at this point. Instead, inform the customer that you confirmed their order and notify them by email when you fulfill their order in the next step.
