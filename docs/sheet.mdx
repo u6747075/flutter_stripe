@@ -157,3 +157,93 @@ Fill out the form with a description and identifier. Your description is for you
 Create a certificate for your app to encrypt payment data.
 
 In the Dashboard’s [Apple Pay Settings](https://dashboard.stripe.com/settings/payments/apple_pay), click **Add new application** and follow the guide there.
+
+#### Integrate with Xcode
+Add the Apple Pay capability to your app. In Xcode, open your project settings, click the **Signing & Capabilities** tab, and add the **Apple Pay** capability. You might be prompted to log in to your developer account at this point. Select the merchant ID you created earlier, and your app is ready to accept Apple Pay.
+
+
+<img src="https://b.stripecdn.com/docs/assets/xcode.a05220aeae26f8b793b5694692a79117.png" height="36" />
+
+####  Add Apple Pay
+To add Apple Pay to PaymentSheet, set `applePay: true`  with your Apple merchant ID and the country code of your business.
+ 
+```dart
+Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+    merchantDisplayName: 'Flutter Stripe Store Demo',
+    //...
+    merchantId: "merchant.com.your_app_name",
+    merchantCountryCode: "US
+  ),
+);
+```
+
+### 7. Optional - Enable Google Pay (Only Android)
+
+### Set up your integration
+To use Google Pay, first enable the Google Pay API by adding the following to the <application> tag of your AndroidManifest.xml:
+
+AndroidManifest.xml
+```xml
+<application>
+  ...
+  <meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
+</application>
+```
+
+This guide assumes you’re using the latest version of the Stripe Android SDK.
+
+build.gradle
+```
+dependencies {
+    implementation 'com.stripe:stripe-android:17.1.1'
+}
+```
+For more details, see Google Pay’s Set up Google Pay API for Android.
+
+### Add Google Pay
+To add Google Pay to your integration, set `googlePay: true` with your Google Pay environment (production or test) and the country code of your business.
+
+```dart
+Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+    merchantDisplayName: 'Flutter Stripe Store Demo',
+    //...
+    testEnv: true,
+    merchantCountryCode: "US",
+  ),
+);
+```
+
+### 8. Optional - Enable Card Scanning (Only iOS)
+
+To enable card scanning support, set the `NSCameraUsageDescription` **(Privacy - Camera Usage Description)** in the Info.plist of your application, and provide a reason for accessing the camera (e.g., “To scan cards”). Devices with iOS 13 or higher support card scanning.
+
+### 9. Optional - Customize the sheet 
+
+All customization is configured through the SetupPaymentSheetParameters object.
+
+### Merchant display name
+You can specify a customer-facing business name that Stripe uses to display a “Pay (merchantDisplayName)” line item in the payment sheet. By default, this is your app’s name.
+
+```dart
+Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+    merchantDisplayName: 'Flutter Stripe Store Demo',
+  ),
+);
+```
+
+### UserInterfaceStyle (Only iOS)
+
+PaymentSheet automatically adapts to the user’s system-wide appearance settings (light and dark mode). If your app doesn’t support dark mode, you can force the style to always light or dark mode.
+
+```dart
+Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+     style: ThemeMode.dark,
+  ),
+);
+```
