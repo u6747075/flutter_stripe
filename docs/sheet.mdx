@@ -13,3 +13,60 @@ description: Accept a payment with Payment Sheet.
 Integrate Stripe’s prebuilt payment UI into the checkout of your app with the PaymentSheet class.
 
 This integration combines all of the steps required to pay—collecting payment details and confirming the payment—into a single sheet that displays on top of your app.
+
+
+### 1. Set up Stripe [Server Side] [Client Side]
+
+First, you need a Stripe account. [Register now](https://dashboard.stripe.com/register).
+
+#### Server-side
+
+This integration requires endpoints on your server that talk to the Stripe API. Use one official libraries for access to the Stripe API from your server. [Follow the steps here](https://stripe.com/docs/payments/accept-a-payment?platform=ios&ui=payment-sheet#setup-server-side)
+
+#### Client-side
+
+The Flutter SDK is open source, fully documented.
+
+To install the SDK, follow these steps:
+ - Run the commmand `flutter pub add flutter_stripe`
+ - This will add a line like this to your project's pubspec.yaml with the latest package version
+
+
+For details on the latest SDK release and past versions, see the [Releases](https://github.com/flutter-stripe/flutter_stripe/releases) page on GitHub. To receive notifications when a new release is published, [watch releases for the repository](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/managing-subscriptions-for-activity-on-github/viewing-your-subscriptions#watching-releases-for-a-repository).
+
+
+When your app starts, configure the SDK with your Stripe [publishable key](https://dashboard.stripe.com/) so that it can make requests to the Stripe API. 
+
+```dart
+void main() async {
+  Stripe.publishableKey = stripePublishableKey;
+  runApp(const App());
+}
+```
+
+Use your [test mode](https://stripe.com/docs/keys#obtain-api-keys) keys while you test and develop, and your [live mode](https://stripe.com/docs/keys#test-live-modes) keys when you publish your app.
+
+### 2. Add an enpoint [Server Side]
+
+First, you need a Stripe account. [Register now](https://dashboard.stripe.com/register).
+
+#### Server-side
+
+This integration uses three Stripe API objects:
+
+1. A [PaymentIntent](https://stripe.com/docs/api/payment_intents). Stripe uses this to represent your intent to collect payment from a customer, tracking your charge attempts and payment state changes throughout the process.
+
+2. A [Customer](https://stripe.com/docs/api/customers) (optional). To set up a card for future payments, it must be attached to a Customer. Create a Customer object when your customer creates an account with your business. If your customer is making a payment as a guest, you can create a Customer object before payment and associate it with your own internal representation of the customer’s account later.
+
+3. A Customer Ephemeral Key (optional). Information on the Customer object is sensitive, and can’t be retrieved directly from an app. An Ephemeral Key grants the SDK temporary access to the Customer.
+
+>> If you never save cards to a Customer and don’t allow returning Customers to reuse saved cards, you can omit the Customer and Customer Ephemeral Key objects from your integration.
+
+For security reasons, your app can’t create these objects. Instead, add an endpoint on your server that:
+
+1. Retrieves the Customer, or creates a new one.
+2. Creates an Ephemeral Key for the Customer.
+3. Creates a PaymentIntent, passing the Customer id.
+4. Returns the Payment Intent’s [client secret](https://stripe.com/docs/api/payment_intents/object#payment_intent_object-client_secret), the Ephemeral Key’s secret, and the Customer’s id to your app.
+
+Check examples implementations for your server [here](https://stripe.com/docs/payments/accept-a-payment?platform=ios#add-server-endpoint)
