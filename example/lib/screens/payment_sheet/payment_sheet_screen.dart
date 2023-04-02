@@ -58,6 +58,7 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
       }),
     );
     final body = json.decode(response.body);
+    print("asdcasdc"+body);
     if (body['error'] != null) {
       throw Exception(body['error']);
     }

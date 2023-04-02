@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:stripe_example/.env.dart';
+import '.env.example.dart';
 import 'screens/screens.dart';
 import 'widgets/dismiss_focus_overlay.dart';
 
@@ -8,7 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;
   Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
-  Stripe.urlScheme = 'flutterstripe';
+  // Stripe.urlScheme = 'flutterstripe';
   await Stripe.instance.applySettings();
   runApp(const App());
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:stripe_example/.env.dart';
 import 'package:stripe_example/widgets/example_scaffold.dart';
+import '../../.env.example.dart';
 import '../../config.dart';
 import 'platforms/stripe_checkout.dart'
     if (dart.library.js) 'platforms/stripe_checkout_web.dart';
